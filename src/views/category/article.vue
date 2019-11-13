@@ -62,12 +62,6 @@
           <el-input v-model="temp.name" placeholder="请填写分类名称" />
         </el-form-item>
 
-        <el-form-item label="父级分类">
-          <div class="block">
-            <el-cascader v-model="temp.parent_id" :options="parentOptions" :props="{ checkStrictly: true }" clearable />
-          </div>
-        </el-form-item>
-
         <el-form-item label="状态">
           <div>
             <el-radio v-model="temp.status" label="1" border size="medium">启用</el-radio>
@@ -107,9 +101,8 @@ import {
   getList,
   edit,
   create,
-  changeStatus,
-  getParentOptions
-} from '@/api/news_category'
+  changeStatus
+} from '@/api/article_category'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -122,7 +115,6 @@ export default {
   },
   data() {
     return {
-      parentOptions: [],
       temp: {},
       dialogFormVisible: false,
       dialogStatus: '',
@@ -142,15 +134,9 @@ export default {
   },
   created() {
     this.getList()
-    this.getParentOptions()
   },
 
   methods: {
-    getParentOptions() {
-      getParentOptions().then(response => {
-        this.parentOptions = response.data.options
-      })
-    },
     getList() {
       this.listLoading = true
       getList(this.listQuery).then(response => {
@@ -205,7 +191,6 @@ export default {
           if (this.temp.id > 0) {
             edit(this.temp).then(response => {
               this.getList()
-              this.getParentOptions()
               this.dialogFormVisible = false
               this.$notify({
                 title: '成功',
@@ -217,7 +202,6 @@ export default {
           } else {
             create(this.temp).then(response => {
               this.getList()
-              this.getParentOptions()
               this.dialogFormVisible = false
               this.$notify({
                 title: '成功',

@@ -36,7 +36,7 @@ export const constantRoutes = [{
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: {
-        title: '我爱赚钱网管理后台',
+        title: '励志语录网管理后台',
         icon: 'dashboard',
         breadcrumb: false
       }
@@ -45,38 +45,20 @@ export const constantRoutes = [{
 ]
 
 export const asyncRoutes = [{
-    path: '/apps',
+    path: '/articles',
     component: Layout,
-    name: 'Apps',
+    name: 'Articles',
     meta: {
-      title: '应用管理',
+      title: '文章管理',
       icon: 'store',
       breadcrumb: false
     },
     children: [{
-      path: 'app-list',
-      component: () => import('@/views/apps/app-list'),
-      name: 'AppList',
+      path: 'article-list',
+      component: () => import('@/views/article/article-list'),
+      name: 'ArticleList',
       meta: {
-        title: '应用列表'
-      }
-    }]
-  },
-  {
-    path: '/news',
-    component: Layout,
-    name: 'News',
-    meta: {
-      title: '资讯管理',
-      icon: 'store',
-      breadcrumb: false
-    },
-    children: [{
-      path: 'news-list',
-      component: () => import('@/views/news/news-list'),
-      name: 'NewsList',
-      meta: {
-        title: '资讯列表'
+        title: '文章列表'
       }
     }]
   },
@@ -90,19 +72,11 @@ export const asyncRoutes = [{
       breadcrumb: false
     },
     children: [{
-        path: 'apps',
-        component: () => import('@/views/category/apps'),
-        name: 'Apps',
+        path: 'article',
+        component: () => import('@/views/category/article'),
+        name: 'Article',
         meta: {
-          title: '应用分类'
-        }
-      },
-      {
-        path: 'news',
-        component: () => import('@/views/category/news'),
-        name: 'News',
-        meta: {
-          title: '资讯分类'
+          title: '文章分类'
         }
       }
     ]

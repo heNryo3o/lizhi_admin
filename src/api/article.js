@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-let model = '/news'
+let model = '/article'
 
 export function getList(data) {
   return request({

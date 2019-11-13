@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-drawer title="应用信息" size='75%' :visible.sync="infoVisible" @open="handleOpen" :wrapperClosable="false"
+    <el-drawer title="文章信息" size='75%' :visible.sync="infoVisible" @open="handleOpen" :wrnewserClosable="false"
       :before-close="handleClose">
       <div style="overflow-y: auto;overflow-x: hidden;width: 94%;margin: auto;">
         <el-form ref="postForm" :model="info" class="form-container">
@@ -9,10 +9,10 @@
               <el-col :span="15">
                 <el-form-item style="margin-bottom: 20px;" prop="name">
                   <MDinput v-model="info.name" :maxlength="100" name="name" required>
-                    应用名称
+                    文章名称
                   </MDinput>
                 </el-form-item>
-                <div style="font-size: 17px;font-weight: 600;margin-bottom: 10px;">应用描述：</div>
+                <div style="font-size: 17px;font-weight: 600;margin-bottom: 10px;">文章描述：</div>
                 <el-form-item prop="content">
                   <Tinymce ref="editor" v-if="freshEditor" v-model="info.content" :height="480" />
                 </el-form-item>
@@ -20,7 +20,7 @@
               <el-col :span="9">
                 <el-card class="box-card" shadow="hover">
                   <div slot="header" class="clearfix">
-                    <span>应用设置</span>
+                    <span>文章设置</span>
                   </div>
                   <el-form-item label="分类：" prop="category">
                     <el-cascader v-model="info.category" :options="cateOptions" placeholder="请选择分类" class="full-width"
@@ -33,16 +33,6 @@
                       <i v-else class="el-icon-plus avatar-uploader-icon" />
                     </el-upload>
                   </el-form-item>
-                  <el-form-item label="二维码图：" prop="code">
-                    <el-upload class="avatar-uploader" v-model="info.code" :action="uploadUrl" :show-file-list="false"
-                      :on-success="handleUploadCodeSuccess" :before-upload="beforeUpload">
-                      <img v-if="info.code" :src="info.code" class="avatar">
-                      <i v-else class="el-icon-plus avatar-uploader-icon" />
-                    </el-upload>
-                  </el-form-item>
-                  <el-form-item label="邀请链接：" prop="url">
-                    <el-input v-model="info.url" placeholder="邀请链接" style="width: 230px;" />
-                  </el-form-item>
                   <el-form-item label="seo标题：" prop="seo_title">
                     <el-input v-model="info.seo_title" placeholder="seo标题" style="width: 230px;" />
                   </el-form-item>
@@ -54,19 +44,6 @@
                   </el-form-item>
                 </el-card>
               </el-col>
-            </el-row>
-            <el-row>
-                <el-col :sm="24">
-                  <el-form-item label="应用截图：" prop="attaches">
-                    <el-upload :action="uploadUrl" list-type="picture-card" :on-preview="handlePictureCardPreview"
-                      :file-list="attaches" :on-remove="handleRemove" :on-success="handleAttachSuccess">
-                      <i class="el-icon-plus"></i>
-                    </el-upload>
-                    <el-dialog :visible.sync="dialogVisible" :modal="false">
-                      <img width="100%" :src="dialogImageUrl" alt="">
-                    </el-dialog>
-                  </el-form-item>
-                </el-col>
             </el-row>
             <el-row :gutter="10" style="margin-bottom: 20px;">
               <el-col :sm="24" class="button-group">
@@ -88,14 +65,14 @@
   import Tinymce from '@/components/Tinymce'
   import {
     categoryOptions
-  } from '@/api/category'
+  } from '@/api/article_category'
   import {
     edit,
     create
-  } from '@/api/apps'
+  } from '@/api/article'
 
   export default {
-    name: 'ProductInfo',
+    name: 'ArticleInfo',
     components: {
       MDinput,
       Tinymce
@@ -104,7 +81,7 @@
       waves
     },
     props: [
-      'infoVisible', 'appInfo'
+      'infoVisible', 'articleInfo'
     ],
     data() {
       return {
@@ -122,30 +99,10 @@
         loading: false,
         loaded: false,
         cateOptions: [],
-        isOnline: 0,
-        attaches: []
+        isOnline: 0
       }
     },
     methods: {
-      handleRemove(file, fileList) {
-        this.fileChange(fileList)
-      },
-      handleAttachSuccess(response, file, fileList) {
-        this.fileChange(fileList)
-      },
-      fileChange(fileList) {
-        const attaches = []
-        if (fileList.length > 0) {
-          for (let i = 0; i < fileList.length; i++) {
-            console.log(fileList[i])
-            attaches[i] = {
-              name: fileList[i].name,
-              url: fileList[i].response ? fileList[i].response.data.preview_url : fileList[i].url
-            }
-          }
-        }
-        this.info.attaches = attaches
-      },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url
         this.dialogVisible = true
@@ -171,14 +128,12 @@
       },
       handleClose() {
         this.freshEditor = false
-        this.attaches = []
         this.$emit('update:infoVisible', false)
       },
       handleOpen() {
         this.getCateOptions()
-        this.info = this.appInfo
+        this.info = this.articleInfo
         this.freshEditor = true
-        this.attaches = this.info.attaches
       },
       handleEdit() {
         // this.info.content = this.$refs.editor.value

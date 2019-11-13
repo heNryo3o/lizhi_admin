@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-let model = '/category'   //指定模块名称,快速生成增删改查接口名
+let model = '/article-category'   //指定模块名称,快速生成增删改查接口名
 
 export function getList(data) {
   return request({
@@ -10,17 +10,9 @@ export function getList(data) {
   })
 }
 
-export function categoryOptions(data) {
+export function getSubCategory(data) {
   return request({
-    url: model+'/options',
-    method: 'get',
-    params: data
-  })
-}
-
-export function newsCategoryOptions(data) {
-  return request({
-    url: model+'/news-options',
+    url: model+'/sub-options',
     method: 'get',
     params: data
   })
@@ -47,5 +39,20 @@ export function changeStatus(data) {
     url: model+'/change-status',
     method: 'post',
     data
+  })
+}
+
+export function getParentOptions(data) {
+  return request({
+    url: model+'/parent-options',
+    method: 'get',
+  })
+}
+
+export function categoryOptions(data) {
+  return request({
+    url: model+'/category-options',
+    method: 'get',
+    params: data
   })
 }

@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <el-card class="box-card" shadow="never">
       <div class="msg-text">
-        『 好好工作 认真生活 』 —— 我爱赚钱网
+        『 好好工作 认真生活 』 —— 励志语录网
       </div>
       <div class="user-content">
         <div class="avatar">

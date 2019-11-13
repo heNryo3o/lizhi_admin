@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '我爱赚钱网管理后台',
+  title: '励志语录网管理后台',
 
   /**
    * @type {boolean} true | false

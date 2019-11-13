@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row class="filter-container" :gutter="10">
       <el-col :sm="4">
-        <el-input v-model="listQuery.name" size="small" prefix-icon="el-icon-search" placeholder="输入应用名称搜索" clearable
+        <el-input v-model="listQuery.name" size="small" prefix-icon="el-icon-search" placeholder="输入资讯名称搜索" clearable
           @keyup.enter.native="handleFilter" />
       </el-col>
       <el-col :sm="3">
@@ -12,23 +12,23 @@
       </el-col>
       <el-col :sm="6">
         <el-date-picker v-model="listQuery.date_range" type="daterange" align="right" size="small" unlink-panels
-          range-separator="-" start-placeholder="发布开始日期" end-placeholder="发布结束日期"
-          value-format="yyyy-MM-dd" format="yyyy年 MM月 dd日" style="width: 100%;" />
+          range-separator="-" start-placeholder="发布开始日期" end-placeholder="发布结束日期" value-format="yyyy-MM-dd" format="yyyy年 MM月 dd日"
+          style="width: 100%;" />
       </el-col>
       <el-col :sm="8">
         <el-button v-waves type="primary" icon="el-icon-search" size="small" @click="handleFilter">
           搜索
         </el-button>
         <el-button v-waves type="success" size="small" @click="handleCreate">
-          添加应用
+          添加资讯
         </el-button>
       </el-col>
     </el-row>
     <div class="table-container">
       <el-table v-loading="listLoading" :data="list" border fit highlight-current-row size="mini" style="font-size: 14px;">
-        <el-table-column label="应用名称" width="210">
+        <el-table-column label="资讯名称" width="210">
           <template slot-scope="{row}">
-            <span class="link-type" @click="handleViewApp(row)">{{ row.name }}</span>
+            <span class="link-type" @click="handleViewarticle(row)">{{ row.name }}</span>
             <el-tag size="mini" type="danger" v-if="row.is_recommen == 1">推荐</el-tag>
           </template>
         </el-table-column>
@@ -53,18 +53,16 @@
 
         <el-table-column label="操作" fixed="right" min-width="260" class-name="small-padding fixed-width">
           <template slot-scope="{row}">
-            <el-button v-waves type="primary" size="mini" @click="handleViewApp(row)">
+            <el-button v-waves type="primary" size="mini" @click="handleViewarticle(row)">
               编辑
             </el-button>
-            <el-button v-if="row.status == 1" v-waves size="mini" type="warning"
-              @click="handleChangeStatus(row,2)">
+            <el-button v-if="row.status == 1" v-waves size="mini" type="warning" @click="handleChangeStatus(row,2)">
               下架
             </el-button>
             <el-button v-else v-waves size="mini" type="success" @click="handleChangeStatus(row,1)">
               上架
             </el-button>
-            <el-button v-if="row.is_recommen == 1" v-waves size="mini" type="warning"
-              @click="handleChangeRecommen(row,2)">
+            <el-button v-if="row.is_recommen == 1" v-waves size="mini" type="warning" @click="handleChangeRecommen(row,2)">
               取消推荐
             </el-button>
             <el-button v-else v-waves size="mini" type="success" @click="handleChangeRecommen(row,1)">
@@ -77,7 +75,7 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <app-info :app-info="appInfo" :info-visible.sync="appVisible" @updateList="getList()" />
+    <article-info :article-info="articleInfo" :info-visible.sync="articleVisible" @updateList="getList()" />
 
   </div>
 </template>
@@ -87,23 +85,23 @@
     getList,
     changeStatus,
     setRecommen
-  } from '@/api/apps'
+  } from '@/api/article'
   import waves from '@/directive/waves'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-  import AppInfo from '@/components/AppInfo'
+  import ArticleInfo from '@/components/ArticleInfo'
 
   export default {
     components: {
       Pagination,
-      AppInfo
+      ArticleInfo
     },
     directives: {
       waves
     },
     data() {
       return {
-        appInfo: {},
-        appVisible: false,
+        articleInfo: {},
+        articleVisible: false,
         statusOptions: [{
             name: '上架中',
             key: 1
@@ -150,20 +148,20 @@
           this.listLoading = false
         })
       },
+      handleCreate() {
+        this.articleInfo = {}
+        this.articleVisible = true
+      },
       handleFilter() {
         this.listQuery.page = 1
         this.getList()
       },
-      handleViewApp(row) {
-        this.appInfo = row
-        this.appVisible = true
-      },
-      handleCreate(){
-        this.appInfo = {}
-        this.appVisible = true
+      handleViewarticle(row) {
+        this.articleInfo = row
+        this.articleVisible = true
       },
       handleChangeStatus(row, status) {
-        var message = status === 1 ? '应用上架成功' : '应用下架成功'
+        var message = status === 1 ? '资讯上架成功' : '资讯下架成功'
         changeStatus({
           id: row.id,
           status: status
